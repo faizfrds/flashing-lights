@@ -1,0 +1,26 @@
+# Environment and secrets
+.env
+*.key
+*.json
+!cloud_app.py
+!package.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.pytest_cache/
+*.log
+
+# Generated output artifacts
+active_flood_alerts.geojson
+index.html
+
+# OS metadata
+.DS_Store
+Thumbs.db

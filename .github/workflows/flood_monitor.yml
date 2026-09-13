@@ -1,0 +1,55 @@
+name: Indonesia Flash Flood 24/7 Cloud Monitor
+
+on:
+  schedule:
+    # Run every 3 hours automatically
+    - cron: '0 */3 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Authenticate with Google Cloud
+        if: env.GCP_SA_KEY != ''
+        run: |
+          echo "${{ secrets.GCP_SA_KEY }}" > sa-key.json
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Run FFEWS Monitor & Dispatch Alerts
+        env:
+          GEE_PROJECT_ID: ${{ secrets.GEE_PROJECT_ID || 'flashflood-508519' }}
+          GEE_SERVICE_ACCOUNT_KEY: sa-key.json
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DEFAULT_REGION: west_java
+        run: |
+          python3 main.py --region west_java --dispatch
+
+      - name: Upload Alert GeoJSON Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flood-alert-data
+          path: |
+            active_flood_alerts.geojson
+            index.html
+          retention-days: 7
+
