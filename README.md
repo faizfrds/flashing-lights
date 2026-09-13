@@ -118,6 +118,63 @@ nohup python3 main.py --region west_java --dispatch --daemon --interval-minutes 
 
 ---
 
+---
+
+## 📢 Discord Webhook Integration (Emergency Alert Relay)
+
+FFEWS features native integration with Discord via incoming webhooks. When dynamic rainfall crosses the critical threshold over high-susceptibility terrain, the system automatically formats and dispatches an emergency warning embed card directly into your designated Discord server/channel.
+
+### 🔔 What the Discord Alert Contains
+
+Each alert is delivered as a formatted embed card color-coded by severity:
+* 🔴 **CRITICAL (Siaga 1)**: Red embed card (`#E74C3C`) for extreme compound risk (Rainfall $\ge 80\text{ mm}$ + Susceptibility $\ge 80$).
+* 🟠 **HIGH ALERT (Waspada)**: Orange embed card (`#E67E22`) for severe storms over steep/deforested catchments.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🚨 FLASH FLOOD ALERT: Kabupaten Bogor, Jawa Barat           │
+│ Flash flood risk threshold exceeded in Cisarua / Puncak.    │
+│                                                             │
+│ Status                 24h Rainfall                         │
+│ CRITICAL               94.5 mm                              │
+│                                                             │
+│ Susceptibility Index   Cluster Area                         │
+│ 88.2 / 100             420.5 ha                             │
+│                                                             │
+│ Event ID               Detected At                          │
+│ FF-IDN-20260913-001    2026-09-13T20:06:11Z                 │
+│                                                             │
+│ Indonesia FFEWS | GEE Automated Sentinel                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🛠️ Setting Up Your Discord Server Webhook
+
+1. **Create Webhook in Discord**:
+   - In your Discord server, navigate to the target alerts channel (e.g. `#flood-monitoring` or `#emergency-alerts`).
+   - Click the **Gear icon (Edit Channel)** $\rightarrow$ **Integrations** $\rightarrow$ **Webhooks**.
+   - Click **New Webhook**, name it (e.g., `Indonesia Flood Sentinel`), and select your alert channel.
+   - Click **Copy Webhook URL**.
+
+2. **Configure for Local Execution**:
+   - Add the URL to your `.env` file:
+     ```ini
+     DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/1234567890/abcdef...
+     ```
+   - Run with the `--dispatch` flag:
+     ```bash
+     python3 main.py --region west_java --dispatch
+     ```
+
+3. **Configure for 24/7 Cloud Monitoring (GitHub Actions)**:
+   - In your GitHub repository (`faizfrds/flash-flood-detection`), go to **Settings** $\rightarrow$ **Secrets and variables** $\rightarrow$ **Actions**.
+   - Click **New repository secret**.
+   - **Name**: `DISCORD_WEBHOOK_URL`
+   - **Secret**: Paste your copied Discord webhook URL.
+   - The scheduled workflow will now automatically post alerts to your Discord channel every 3 hours.
+
+---
+
 ## 🗺️ Interactive Dashboard
 
 When running `main.py`, an interactive Leaflet map (`index.html`) is rendered automatically with:
