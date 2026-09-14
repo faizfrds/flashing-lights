@@ -140,6 +140,7 @@ Each alert is delivered as a formatted embed card color-coded by severity:
 │ Indonesia FFEWS | GEE Automated Sentinel                    │
 └─────────────────────────────────────────────────────────────┘
 ```
+### Live Webhook Demo: https://discord.gg/kCrN4nGdA
 
 ### 🛠️ Setting Up Your Discord Server Webhook
 
