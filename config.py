@@ -32,6 +32,12 @@ REGION_PRESETS: Dict[str, RegionPreset] = {
         bbox=[106.3, -7.8, 108.8, -5.9],
         admin_filter={"adm1_name": "Jawa Barat"},
     ),
+    "east_java": RegionPreset(
+        name="East Java",
+        description="East Java Brantas Basin & volcanic catchments",
+        bbox=[111.0, -8.8, 114.6, -6.8],
+        admin_filter={"adm1_name": "Jawa Timur"},
+    ),
     "dki_jakarta": RegionPreset(
         name="DKI Jakarta",
         description="Special Capital Region of Jakarta",
@@ -98,7 +104,7 @@ class FFEWSConfig:
     custom_webhook_url: Optional[str] = os.getenv("CUSTOM_WEBHOOK_URL")
 
     # Active Region
-    default_region: str = os.getenv("DEFAULT_REGION", "west_java")
+    default_region: str = os.getenv("DEFAULT_REGION", "indonesia")
 
     def get_region(self, region_key: Optional[str] = None) -> RegionPreset:
         key = (region_key or self.default_region).lower()

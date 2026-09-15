@@ -37,6 +37,7 @@ flashflood-detection/
 ├── config.py                 # Region presets (West Java, Jakarta, Sumatra, etc.) and thresholds
 ├── main.py                   # Main CLI pipeline orchestrator
 ├── requirements.txt          # Python dependencies
+├── .env.example              # Environment variables template
 ├── core/
 │   ├── gee_gateway.py        # Earth Engine authentication and simulation manager
 │   ├── susceptibility.py     # Static NASADEM slope & forest risk index
@@ -67,12 +68,21 @@ pip install -r requirements.txt
 
 ### 2. Configure Environment
 
+Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+
+Set your Google Cloud project and notification credentials in `.env`:
 Create a `.env` file in the project root:
 ```ini
+GEE_PROJECT_ID=your-gcp-project-id
 GEE_PROJECT_ID=flashflood-508519
 DEFAULT_REGION=west_java
 CRITICAL_RAINFALL_MM=50.0
 SUSCEPTIBILITY_ALERT_THRESHOLD=70.0
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+TELEGRAM_CHAT_ID=-1001234567890
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 

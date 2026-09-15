@@ -87,7 +87,7 @@ class AlertEngine:
         if not EE_AVAILABLE or GEEGateway.is_simulation():
             return self._generate_simulation_hotspots(region)
 
-        analysis_scale = scale or self.cfg.analysis_scale_m
+        analysis_scale = scale or (1000 if "indonesia" in region.name.lower() else self.cfg.analysis_scale_m)
         logger.info(f"Vectorizing alert pixels at scale {analysis_scale}m...")
 
         # 1. Reduce raster clusters into vector polygons
@@ -97,7 +97,8 @@ class AlertEngine:
             geometryType="polygon",
             eightConnected=True,
             labelProperty="zone",
-            maxPixels=1e8,
+            maxPixels=1e9,
+            tileScale=4,
         )
 
         # 2. Filter out single-pixel noise by minimum cluster area

@@ -4,7 +4,20 @@ on:
   schedule:
     # Run every 3 hours automatically
     - cron: '0 */3 * * *'
-  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'Target Region for Monitoring'
+        required: true
+        default: 'indonesia'
+        type: choice
+        options:
+          - indonesia
+          - west_java
+          - east_java
+          - dki_jakarta
+          - north_sumatra
+          - bali
 
 jobs:
   monitor:
@@ -39,9 +52,9 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DEFAULT_REGION: west_java
+          DEFAULT_REGION: ${{ inputs.region || vars.TARGET_REGION || 'indonesia' }}
         run: |
-          python3 main.py --region east_java --dispatch
+          python3 main.py --region "${{ inputs.region || vars.TARGET_REGION || 'indonesia' }}" --dispatch
 
       - name: Upload Alert GeoJSON Artifact
         if: always()
@@ -52,4 +65,3 @@ jobs:
             active_flood_alerts.geojson
             index.html
           retention-days: 7
-

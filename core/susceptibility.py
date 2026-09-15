@@ -36,7 +36,7 @@ class SusceptibilityEngine:
         elif region.admin_filter and "country_na" in region.admin_filter:
             lsib = ee.FeatureCollection(self.cfg.admin_country_dataset)
             country = lsib.filter(ee.Filter.eq("country_na", "Indonesia"))
-            return country.geometry()
+            return country.geometry().simplify(1000)
 
         # Fallback to bounding box rectangle
         min_x, min_y, max_x, max_y = region.bbox
