@@ -41,7 +41,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DEFAULT_REGION: west_java
         run: |
-          python3 main.py --region west_java --dispatch
+          python3 main.py --region east_java --dispatch
 
       - name: Upload Alert GeoJSON Artifact
         if: always()
