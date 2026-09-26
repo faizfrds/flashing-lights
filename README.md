@@ -1,4 +1,4 @@
-# 🌊 Indonesia Flash Flood Early Warning System (FFEWS)
+# 🌊 Indonesia Flash Flood Early Warning System
 
 An automated hydrological early warning system for Indonesia developed in Python and **Google Earth Engine (GEE)**. FFEWS combines static environmental susceptibility factors (topographic slope from NASADEM and forest canopy friction from Hansen Global Forest Change) with dynamic near-real-time satellite precipitation (JAXA GSMaP Operational and NASA GPM IMERG) to generate spatial alert polygons and notify administrative disaster responders (BPBD).
 
